@@ -1,48 +1,37 @@
 import { openDB } from 'idb';
 
 const initdb = async () =>
-  openDB('pwate', 1, {
+  openDB('jate_db', 1, {
     upgrade(db) {
-      if (db.objectStoreNames.contains('pwate')) {
-        console.log('pwate database already exists');
+      if (db.objectStoreNames.contains('jate')) {
+        console.log('jate database already exists');
         return;
       }
-      db.createObjectStore('pwate', { keyPath: 'id', autoIncrement: true });
-      console.log('pwate database created');
+      db.createObjectStore('jate', { keyPath: 'id', autoIncrement: true });
+      console.log('jate database created');
     },
   });
 
-
 export const putDb = async (content) => {
-  console.error('putDb not implemented');
+  const jateDB = await openDB('jate_db', 1);
+  const tx = jateDB.transaction('jate', 'readwrite');
+  const store = tx.objectStore('jate');
 
-const pwateDb = await openDB('pwate', 1);
-const tx = pwateDb.transaction('pwate', readwrite);
-const store = tx.objectStore('pwate');
+  const request = store.put({ id: 1, value: content });
+  const result = await request;
 
-let request = store.put({ id: 1, value: content });
-let result = await request;
-if (!result) {
-  request = store.add({ value: content });
-  result = await request;
+  console.log('Data saved to database', result);
 }
 
-console.log('Results saved', result);
-};
-
 export const getDb = async () => {
-  console.error('Error retriving Data');
+  const jateDB = await openDB('jate_db', 1);
+  const tx = jateDB.transaction('jate', 'readonly');
+  const store = tx.objectStore('jate');
 
-  const pwateDb = await openDB('pwate', 1);
-  const tx = pwateDb.transaction('pwate', readonly);
-  const store = tx.objectStore('pwate');
-
-  let request = store.count();
-  let result = await request;
-
-  if (result) {
-    return await store.get(1)[0].value;
-  }
+  const request = store.getAll();
+  const result = await request;
+  
+  console.log(result);
   return result;
 };
 
