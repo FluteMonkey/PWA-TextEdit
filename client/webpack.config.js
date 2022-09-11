@@ -15,7 +15,23 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'PWA text Editor',
+      }),
+      new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
+        name: 'PWA Text Editor',
+        short_name: 'PWATE',
+        description: 'Takes notes with JavaScript syntax highlighting!',
+        background_color: '#225ca3',
+        theme_color: '#225ca3',
+        orientation: 'portrait',
+        display: 'standalone',
+        start_url: './',
+        publicPath: './',
+      }),
     ],
 
     module: {
