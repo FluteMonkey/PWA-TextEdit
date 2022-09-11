@@ -20,8 +20,14 @@ module.exports = () => {
 
     module: {
       rules: [
-        
+        {
+          use: ['style-loader', 'css-loader'],
+          test: /\.css$/,
+        }
       ],
     },
+    experiments: {
+      topLevelAwait: true
+    }
   };
 };
